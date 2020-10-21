@@ -1,42 +1,49 @@
 import React, { useState } from 'react';
 import './App.css';
-import Map from './mapcontainer'
-import Info from './infopage'
+import Map from './map'
 const places = require('./csvjson')
 
 function App() {
-
-  const [step, setStep] = useState(0) 
+  
+  const [step, setStep] = useState() 
   const [clientClick, setClientClick] = useState({})
   const [showMarker, setShowMarker] = useState()
   const [chosen, setChosen] = useState()
   const [points, setPoints] = useState(0);
-  // const [position, setPosition] = useState({})
+  const [gameOver, setGameOver] = useState(true)
+  
+  const startGame = () => {
+    setGameOver(false)
+    setStep(1)
+    setPoints(0)
+    setClientClick({})
+    setChosen(places[Math.floor(Math.random() * 1240)]); 
+    setShowMarker(false)
+  }
 
   const handleClick = function (e) {
-    if (step !== 0 && !showMarker) {
+    if (!gameOver) {
       setShowMarker(true)
       setClientClick({
         lat: e.latLng.lat(),
         lng: e.latLng.lng()
       })
+    
       const distance = getDistance(position.lat, position.lng, e.latLng.lat(), e.latLng.lng())
       calcPoints(distance);
-    } else return;
-  }
+    }
+    if (step === 8) {
+      setGameOver(true)
+    }
+   } 
   
   const handleNext = function () {
-    if (step === 8) {
-      gameOver()
-    }
-    else {
-      setChosen(places[Math.floor(Math.random() * 1240)]); 
-      setStep(step + 1)
-      setShowMarker(false)
-      setClientClick({})
-    }
+    setChosen(places[Math.floor(Math.random() * 1240)]); 
+    setStep(step + 1)
+    setShowMarker(false)
+    setClientClick({})
   }
-console.log(places.length)
+
 
   function getDistance(lat1,lon1,lat2,lon2) {
     let R = 6371; // Radius of the earth in km
@@ -83,26 +90,22 @@ console.log(places.length)
     setPoints(prev => prev + points)
   }
 
-  function gameOver () {
-    setStep(0)
-    setPoints(0)
-    setClientClick({})
-  }
-
-  const position = step === 0 ? null : { lat: chosen['Y'], lng: chosen['X']}
+  const position = step ?  { lat: chosen['Y'], lng: chosen['X']} : null
 
   return (
     <div className="App">
-      <Map 
+      <Map
         markerPosition={position} 
         showMarker={showMarker}
         clientClick={clientClick} 
         handleClick={handleClick}/>
       
       <div>
-        {chosen && chosen['MGLSDE_LOC']}
-  <button onClick={handleNext}>{step === 0 ? 'Start Game' : 'Next'}</button>
-  {step > 0 && <Info points={points} step={step}/>}
+        {!gameOver && <div>find: {chosen['MGLSDE_LOC']}</div>}
+        {gameOver && <button onClick={startGame}>Start New Game</button>}
+        {step && <div>score: {points}</div>}
+        {step && <div>{gameOver? `game over` : `step: ${step} / 8`}</div>}
+        {showMarker && !gameOver && <button onClick={handleNext}>Next</button>}
       </div>
     </div>
   );
