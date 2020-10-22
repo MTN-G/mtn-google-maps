@@ -8,6 +8,7 @@ function Map ({markerPosition, showMarker, clientClick, handleClick}) {
 
     const defaultCenter = { lat: 31.45, lng: 35 }
 
+
     const InitMap = withScriptjs (withGoogleMap (props  => 
         <GoogleMap
             defaultZoom={7.4}
@@ -20,6 +21,7 @@ function Map ({markerPosition, showMarker, clientClick, handleClick}) {
                         featureType: "all",
                         elementType: "labels",
                         stylers: [{ visibility: "off" }],
+                        width: '700px'
                     }]
               }}>
             {showMarker && <Marker position={props.marker}/>}
@@ -27,15 +29,15 @@ function Map ({markerPosition, showMarker, clientClick, handleClick}) {
         </GoogleMap>
     ))   
 
-  
 
     return (
         <InitMap 
+        
         marker={markerPosition}
-        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_KEY}&v=3.exp&libraries=geometry,drawing,places`}
+        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_KEY}`}
         loadingElement={<div style={{ height: `100%` }}/>}
-        containerElement={<div style={{ height: `650px`, width: '300px' }} />}
-        mapElement={<div style={{ height: `600px` }} />}
+        containerElement={<div/>}
+        mapElement={<div style={{ minHeight: `550px`, minWidth: '300px', borderColor: 'transparent', borderRadius: '5%'}} />}
         />
     )  
 }

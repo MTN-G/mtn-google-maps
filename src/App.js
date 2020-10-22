@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
 import Map from './map'
-const places = require('./csvjson')
+const placesFromJson = require('./csvjson')
+const places = placesFromJson.filter( place => place['MGLSDE_L_4'] )
+
 
 function App() {
-  
+  console.log(places.length)
   const [step, setStep] = useState() 
   const [clientClick, setClientClick] = useState({})
   const [showMarker, setShowMarker] = useState()
   const [chosen, setChosen] = useState()
   const [points, setPoints] = useState(0);
-  const [gameOver, setGameOver] = useState(true)
+  const [gameOver, setGameOver] = useState(true);
   
   const startGame = () => {
     setGameOver(false)
@@ -95,13 +97,13 @@ function App() {
   return (
     <div className="App">
       <Map
+        className="map"
         markerPosition={position} 
         showMarker={showMarker}
         clientClick={clientClick} 
         handleClick={handleClick}/>
-      
       <div>
-        {!gameOver && <div>find: {chosen['MGLSDE_LOC']}</div>}
+        {!gameOver && <div>find: {chosen['MGLSDE_L_4']}</div>}
         {gameOver && <button onClick={startGame}>Start New Game</button>}
         {step && <div>score: {points}</div>}
         {step && <div>{gameOver? `game over` : `step: ${step} / 8`}</div>}
