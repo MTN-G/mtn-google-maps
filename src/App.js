@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import './App.css';
 import Map from './map'
 const placesFromJson = require('./csvjson')
@@ -13,7 +13,13 @@ function App() {
   const [chosen, setChosen] = useState()
   const [points, setPoints] = useState(0);
   const [gameOver, setGameOver] = useState(true);
-  
+  const position = useMemo(() => {
+    if (step) 
+    return (
+     {lat: chosen['Y'], lng: chosen['X']}
+  )}, [chosen, step])
+
+
   const startGame = () => {
     setGameOver(false)
     setStep(1)
@@ -24,7 +30,7 @@ function App() {
   }
 
   const handleClick = function (e) {
-    if (!gameOver) {
+    if (!gameOver && !showMarker) {
       setShowMarker(true)
       setClientClick({
         lat: e.latLng.lat(),
@@ -92,7 +98,7 @@ function App() {
     setPoints(prev => prev + points)
   }
 
-  const position = step ?  { lat: chosen['Y'], lng: chosen['X']} : null
+  
 
   return (
     <div className="App">
