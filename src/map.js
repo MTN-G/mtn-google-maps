@@ -1,6 +1,6 @@
 import React from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps"
-require('dotenv').config()
+import { MAP_KEY } from './secret'
 
 function Map ({markerPosition, showMarker, clientClick, handleClick}) {
 
@@ -32,9 +32,8 @@ function Map ({markerPosition, showMarker, clientClick, handleClick}) {
 
     return (
         <InitMap 
-        
         marker={markerPosition}
-        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.MAP_KEY}`}
+        googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${MAP_KEY}`}
         loadingElement={<div style={{ height: `100%` }}/>}
         containerElement={<div/>}
         mapElement={<div style={{ minHeight: `550px`, minWidth: '300px', borderColor: 'transparent', borderRadius: '5%'}} />}
